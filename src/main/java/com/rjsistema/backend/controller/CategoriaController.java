@@ -1,33 +1,34 @@
 package com.rjsistema.backend.controller;
 
-import com.rjsistema.backend.model.Produto;
-import com.rjsistema.backend.service.ProdutoService;
+import com.rjsistema.backend.model.Categoria;
+import com.rjsistema.backend.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/produtos")
-@CrossOrigin(origins = "*")
-public class ProdutoController {
+@RequestMapping("/api/categorias")
+@CrossOrigin(origins = "*") // Permite a comunicação do front local sem bloqueios de CORS
+public class CategoriaController {
 
     @Autowired
-    private ProdutoService service;
+    private CategoriaRepository repository;
 
     @GetMapping
-    public List<Produto> listar() {
-        return service.listarTodos();
+    public List<Categoria> listar() {
+        return repository.findAll();
     }
 
     @PostMapping
-    public Produto salvar(@RequestBody Produto produto) {
-        return service.salvar(produto);
+    public Categoria salvar(@RequestBody Categoria categoria) {
+        return repository.save(categoria);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-        service.deletar(id);
+        repository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }
+
