@@ -1,14 +1,16 @@
-// 1. Salvar Cliente
 function salvarClienteWeb(event) {
-    event.preventDefault(); // Trava o navegador
+    event.preventDefault();
+
+    const API_URL = "http://localhost:8080/api/clientes";
+    const idInput = document.getElementById("txtID").value;
 
     const clienteObjeto = {
-        id: document.getElementById("txtID").value || null,
+        id: idInput ? parseInt(idInput) : null,
         nomeRazao: document.getElementById("txtRazaoSocialNome").value.trim(),
         nomeFantasia: document.getElementById("txtNomeFantasia").value.trim(),
         cnpjCpf: document.getElementById("txtCNPJCPF").value.trim(),
-        nascimento: document.getElementById("txtNascimento").value,
-        profissao: document.getElementById("txtProfissaoAtividade").value.trim(), 
+        dataNascimento: document.getElementById("txtNascimento").value || null,
+        profissaoAtividade: document.getElementById("txtProfissaoAtividade").value.trim(), 
         rua: document.getElementById("txtRua").value.trim(),
         bairro: document.getElementById("txtBairro").value.trim(),
         cidade: document.getElementById("txtCidade").value.trim(),
@@ -20,44 +22,70 @@ function salvarClienteWeb(event) {
         observacao: document.getElementById("txtObservacao").value.trim()
     };
 
-    console.log("JSON pronto para transmissão REST API:", clienteObjeto);
-    
-    alert(`Sucesso absoluto!\nO cliente "${clienteObjeto.nomeRazao}" foi salvo corretamente no banco de dados MySQL.`);
-    limparCamposClienteWeb();
+    // Envia o JSON estruturado via método POST para o Spring Boot
+    fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(clienteObjeto)
+    })
+    .then(async response => {
+        if (!response.ok) {
+            const mensagemErro = await response.text();
+            throw new Error(mensagemErro || "Erro ao salvar registro.");
+        }
+        return response.json();
+    })
+    .then(dadosSalvos => {
+        alert(`Sucesso absoluto!\nO cliente "${dadosSalvos.nomeRazao}" foi gravado com a chave física ID ${dadosSalvos.id} no banco MySQL.`);
+        limparCamposClienteWeb();
+    })
+    .catch(error => alert("Alerta de Validação: " + error.message));
 }
 
-// 2. Limpar Campos (Acionada pelo botão Limpar e pelo pós-salvamento)
 function limparCamposClienteWeb() {
     const form = document.getElementById("formCliente");
     if (form) {
         form.reset();
         document.getElementById("txtID").value = "";
-        document.getElementById("txtRazaoSocialNome").focus(); // Devolve o cursor ao primeiro campo
+        document.getElementById("txtRazaoSocialNome").focus();
     }
 }
 
-// 3. Buscar Cliente
 function buscarClienteWeb() {
-    const idBusca = prompt("Insira o ID de pesquisa do Cliente:");
-    if (idBusca && !isNaN(idBusca)) {
-        alert(`Simulação: Buscando dados do cliente ID ${idBusca}...`);
-        
-        // Formulário com dados fictícios para teste de interface
-        document.getElementById("txtID").value = idBusca;
-        document.getElementById("txtRazaoSocialNome").value = "Cliente Teste de Migração";
-        document.getElementById("txtNomeFantasia").value = "Cliente João Quevedo";
-        document.getElementById("txtCNPJCPF").value = "012.218.002-54";
-        document.getElementById("txtCidade").value = "Camaquã";
-        document.getElementById("txtProfissaoAtividade").value = "Autônomo";
-        document.getElementById("txtEstado").value = "RS";
-        document.getElementById("txtRua").value = "Av Sete de Setembro, 88";
-        document.getElementById("txtBairro").value = "Vila Nova";
-        document.getElementById("txtCEP").value = "96.781-218";
-        document.getElementById("txtTelefoneContato").value = "(51)99994-0537";
-        document.getElementById("txtWhatsapp").value = "(51)99994-0537";
-        document.getElementById("txtEmail").value = "coisinhadejesus@casetaeplaneta.com.br";
-        document.getElementById("txtObservacao").value = "JACKS DO PANDEIRO";
-    } else if (idBusca) {
-        alert("O ID fornecido deve possuir apenas caracteres numéricos.");
+    const idBusca = prompt("Insira o ID de consulta do Cliente:");
+    if (!idBusca || isNaN(idBusca)) {
+        if (idBusca) alert("O ID fornecido deve possuir apenas caracteres numéricos.");
+        return;
     }
+
+    // Busca reativa direto no endpoint individual do JPA
+    fetch(`http://localhost:8080/api/clientes`)
+        .then(response => response.json())
+        .then(lista => {
+            const cliente = lista.find(c => c.id === parseInt(idBusca));
+            if (!cliente) {
+                alert(`Nenhum cliente localizado com a chave ID ${idBusca}.`);
+                return;
+            }
+            
+            // Hidrata as caixas de texto com as informações reais vindas das tabelas
+            document.getElementById("txtID").value = cliente.id;
+            document.getElementById("txtRazaoSocialNome").value = cliente.nomeRazao;
+            document.getElementById("txtNomeFantasia").value = cliente.nomeFantasia || "";
+            document.getElementById("txtCNPJCPF").value = cliente.cnpjCpf;
+            document.getElementById("txtNascimento").value = cliente.dataNascimento || "";
+            document.getElementById("txtProfissaoAtividade").value = cliente.profissaoAtividade || "";
+            document.getElementById("txtRua").value = cliente.rua || "";
+            document.getElementById("txtBairro").value = cliente.bairro || "";
+            document.getElementById("txtCidade").value = cliente.cidade || "";
+            document.getElementById("txtEstado").value = cliente.estado || "";
+            document.getElementById("txtCEP").value = cliente.cep || "";
+            document.getElementById("txtTelefoneContato").value = cliente.telefone || "";
+            document.getElementById("txtWhatsapp").value = cliente.whatsapp || "";
+            document.getElementById("txtEmail").value = cliente.email || "";
+            document.getElementById("txtObservacao").value = cliente.observacao || "";
+            
+            alert(`Ficha cadastral do ID ${cliente.id} recuperada e carregada na tela!`);
+        })
+        .catch(err => alert("Erro ao conectar ao servidor: " + err.message));
 }

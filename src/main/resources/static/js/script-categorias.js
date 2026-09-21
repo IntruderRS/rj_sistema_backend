@@ -7,97 +7,111 @@
     const btnLimpar = document.getElementById("btnLimparCategoria");
     const tbody = document.getElementById("tbodyCategorias");
 
-    // Simulação do catálogo inicial salvo no banco MySQL
-    let categoriasBanco = [
-        { id: 1, nome: "LUBRIFICANTES E FLUIDOS" },
-        { id: 2, nome: "PNEUS E RODAS" },
-        { id: 3, nome: "SISTEMA DE FREIOS" },
-        { id: 4, nome: "SUSPENSÃO E AMORTECEDORES" }
-    ];
+    const API_URL = "http://localhost:8080/api/categorias";
 
-    // FUNÇÃO QUE SIMULA A TABELA DINAMICAMENTE
-    function atualizarTabelaCategorias() {
-        tbody.innerHTML = ""; // Limpa o grid visual
+    // 1. CONSULTA (GET): Busca os dados reais gravados no MySQL
+    function carregarCategoriasDoBanco() {
+        fetch(API_URL)
+            .then(response => {
+                if (!response.ok) throw new Error("Falha ao consultar catálogo de categorias.");
+                return response.json();
+            })
+            .then(categorias => {
+                tbody.innerHTML = ""; // Limpa a grade visual
+                
+                if (categorias.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #94a3b8; padding: 20px;">Nenhuma categoria registrada no banco de dados.</td></tr>`;
+                    return;
+                }
 
-        categoriasBanco.forEach(cat => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><strong>${cat.id}</strong></td>
-                <td>${cat.nome}</td>
-                <td style="text-align: center;">
-                    <button type="button" class="btn-action-sm edit" data-id="${cat.id}"><i class="fa-solid fa-pen"></i></button>
-                    <button type="button" class="btn-action-sm delete" data-id="${cat.id}"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        configurarCliquesAcoesTabela();
+                categorias.forEach(cat => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>${cat.id}</strong></td>
+                        <td>${cat.nome}</td>
+                        <td style="text-align: center;">
+                            <button type="button" class="btn-action-sm edit" data-id="${cat.id}"><i class="fa-solid fa-pen"></i></button>
+                            <button type="button" class="btn-action-sm delete" data-id="${cat.id}"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                configurarEventosDoGrid(categorias);
+            })
+            .catch(error => alert("Erro operacional de rede: " + error.message));
     }
 
-    // INTERCEPTA OS BOTÕES DE EDITAR E EXCLUIR DE CADA LINHA (COMPORTAMENTO JTABLE)
-    function configurarCliquesAcoesTabela() {
-        // Ação do Botão Editar
+    // 2. INTERCEPTAÇÃO DE AÇÕES (EDITAR / DELETAR VIA API)
+    function configurarEventosDoGrid(listaCategorias) {
+        // Ação do Botão Editar (Carrega de volta para os inputs)
         tbody.querySelectorAll(".btn-action-sm.edit").forEach(btn => {
             btn.addEventListener("click", () => {
                 const id = parseInt(btn.getAttribute("data-id"));
-                const itemencontrado = categoriasBanco.find(c => c.id === id);
-                if (itemencontrado) {
-                    // Preenche o formulário da esquerda com os dados da linha quando clicada
-                    txtIDCategoria.value = itemencontrado.id;
-                    txtNomeCategoria.value = itemencontrado.nome;
+                const item = listaCategorias.find(c => c.id === id);
+                if (item) {
+                    txtIDCategoria.value = item.id;
+                    txtNomeCategoria.value = item.nome;
                     txtNomeCategoria.focus();
                 }
             });
         });
 
-        // Ação do Botão Excluir
+        // Ação do Botão Excluir (Dispara requisição DELETE real para o Spring)
         tbody.querySelectorAll(".btn-action-sm.delete").forEach(btn => {
             btn.addEventListener("click", () => {
-                const id = parseInt(btn.getAttribute("data-id"));
-                const confirmar = confirm(`Deseja realmente remover permanentemente a categoria ID ${id}?`);
-                if (confirmar) {
-                    categoriasBanco = categoriasBanco.filter(c => c.id !== id);
-                    atualizarTabelaCategorias(); // Recarrega o grid visual na hora
+                const id = btn.getAttribute("data-id");
+                if (confirm(`Deseja realmente remover permanentemente a categoria ID ${id} do banco de dados?`)) {
+                    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+                        .then(response => {
+                            if (!response.ok) throw new Error("O servidor recusou a exclusão.");
+                            alert("Registro removido com sucesso do MySQL!");
+                            carregarCategoriasDoBanco(); // Recarrega o grid na hora
+                        })
+                        .catch(error => alert("Erro ao deletar: " + error.message));
                 }
             });
         });
     }
 
-    // Converte em letras maiúsculas em tempo de digitação, para ficar sempre padrão
+    // Caixa alta automática
     txtNomeCategoria.addEventListener("input", () => {
         txtNomeCategoria.value = txtNomeCategoria.value.toUpperCase();
     });
 
-    // EVENTO DE SUBMIT (SALVAR / ATUALIZAR)
+    // 3. PERSISTÊNCIA (POST): Grava ou atualiza no banco
     form.addEventListener("submit", (e) => {
         e.preventDefault();
-        const nomeValue = txtNomeCategoria.value.trim();
+        
+        const categoriaObjeto = {
+            id: txtIDCategoria.value ? parseInt(txtIDCategoria.value) : null,
+            nome: txtNomeCategoria.value.trim()
+        };
 
-        if (txtIDCategoria.value) {
-            // SE JÁ TEM ID: É uma Edição
-            const id = parseInt(txtIDCategoria.value);
-            const index = categoriasBanco.findIndex(c => c.id === id);
-            if (index !== -1) categoriasBanco[index].nome = nomeValue;
-            alert("Categoria atualizada com sucesso no banco!");
-        } else {
-            // SE NÃO TEM ID: É um registro novo
-            const proximoId = categoriasBanco.length > 0 ? Math.max(...categoriasBanco.map(c => c.id)) + 1 : 1;
-            categoriasBanco.push({ id: proximoId, nome: nomeValue });
-            alert("Nova categoria gravada com sucesso!");
-        }
-
-        form.reset();
-        txtIDCategoria.value = "";
-        atualizarTabelaCategorias(); // Sincroniza o grid visual instantaneamente
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(categoriaObjeto)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Erro ao gravar dados no servidor.");
+            return response.json();
+        })
+        .then(() => {
+            alert("Operação realizada com sucesso absoluto no banco!");
+            limparFormulario();
+            carregarCategoriasDoBanco(); // Sincroniza o grid dinamicamente
+        })
+        .catch(error => alert("Erro de persistência: " + error.message));
     });
 
-    btnLimpar.addEventListener("click", () => {
+    function limparFormulario() {
         form.reset();
         txtIDCategoria.value = "";
         txtNomeCategoria.focus();
-    });
+    }
 
-    // Inicializa a tabela na abertura da tela
-    atualizarTabelaCategorias();
+    btnLimpar.addEventListener("click", limparFormulario);
+
+    // Carrega a listagem do banco assim que a tela abre
+    carregarCategoriasDoBanco();
 })();
