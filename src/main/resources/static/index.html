@@ -172,22 +172,25 @@
                         <div class="kpi-card blue">
                             <div class="kpi-icon"><i class="fa-solid fa-wallet"></i></div>
                             <div class="kpi-info">
-                                <h3>Faturamento Diário</h3>
-                                <p class="kpi-value">R$ 25.320,50</p>
+                                <h3>Faturamento Mensal</h3>
+                                <!-- ADICIONADO ID: kpi-faturamento -->
+                                <p class="kpi-value" id="kpi-faturamento">R$ 0,00</p>
                             </div>
                         </div>
                         <div class="kpi-card green">
                             <div class="kpi-icon"><i class="fa-solid fa-cart-check"></i></div>
                             <div class="kpi-info">
                                 <h3>Pedidos Faturados</h3>
-                                <p class="kpi-value">15 Pedidos</p>
+                                <!-- ADICIONADO ID: kpi-pedidos -->
+                                <p class="kpi-value" id="kpi-pedidos">0 Pedidos</p>
                             </div>
                         </div>
                         <div class="kpi-card orange">
-                            <div class="kpi-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+                            <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
                             <div class="kpi-info">
-                                <h3>Alerta de Estoque</h3>
-                                <p class="kpi-value">3 Itens Baixos</p>
+                                <h3>Clientes Ativos</h3>
+                                <!-- ADICIONADO ID: kpi-clientes -->
+                                <p class="kpi-value" id="kpi-clientes">0 Ativos</p>
                             </div>
                         </div>
                     </div>
@@ -195,11 +198,27 @@
                     <div class="charts-row">
                         <div class="chart-box">
                             <h3><i class="fa-solid fa-chart-bar"></i> Vendas por Categoria (Mês Atual)</h3>
-                            <div class="simulated-chart-bar">
-                                <div class="bar" style="height: 80%;" data-label="Lubrificantes"></div>
-                                <div class="bar" style="height: 65%;" data-label="Pneus"></div>
-                                <div class="bar" style="height: 40%;" data-label="Freios"></div>
-                                <div class="bar" style="height: 90%;" data-label="Suspensão"></div>
+                            <div
+                                style="height: 200px; display: flex; align-items: flex-end; justify-content: space-around; padding-top: 20px; border-bottom: 2px solid #cbd5e1;">
+                                <div id="bar0"
+                                    style="width: 40px; height: 0%; background: #0284c7; border-radius: 4px 4px 0 0; transition: height 0.5s;">
+                                </div>
+                                <div id="bar1"
+                                    style="width: 40px; height: 0%; background: #0284c7; border-radius: 4px 4px 0 0; transition: height 0.5s;">
+                                </div>
+                                <div id="bar2"
+                                    style="width: 40px; height: 0%; background: #0284c7; border-radius: 4px 4px 0 0; transition: height 0.5s;">
+                                </div>
+                                <div id="bar3"
+                                    style="width: 40px; height: 0%; background: #0284c7; border-radius: 4px 4px 0 0; transition: height 0.5s;">
+                                </div>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-around; margin-top: 8px; font-size: 12px; color: #64748b; font-weight: bold;">
+                                <span id="lbl0">-</span>
+                                <span id="lbl1">-</span>
+                                <span id="lbl2">-</span>
+                                <span id="lbl3">-</span>
                             </div>
                         </div>
                     </div>

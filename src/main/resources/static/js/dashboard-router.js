@@ -265,4 +265,56 @@ document.addEventListener("DOMContentLoaded", () => {
         novoScript.src = "js/" + nomeScript;
         document.body.appendChild(novoScript);
     }
+
+    function carregarKpisReaisDoDashboard() {
+        const API_URL = "http://localhost:8080/api/dashboard/kpis";
+        const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                const txtFaturamento = document.getElementById("kpi-faturamento");
+                const txtPedidos = document.getElementById("kpi-pedidos");
+                const txtClientes = document.getElementById("kpi-clientes");
+
+                if (txtFaturamento) txtFaturamento.innerText = formatador.format(data.faturamentoMensal);
+                if (txtPedidos) txtPedidos.innerText = `${data.pedidosFaturados} Pedidos`;
+                if (txtClientes) txtClientes.innerText = `${data.clientesNovos} Ativos`;
+            })
+            .catch(err => console.error("Falha ao atualizar painel:", err));
+    }
+
+    // Dispara a atualização na abertura do painel
+    carregarKpisReaisDoDashboard();
+
+    function carregarGraficoDinamicoDoBanco() {
+        const API_URL = "http://localhost:8080/api/dashboard/grafico-vendas";
+
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || data.length === 0) return;
+
+                // Racha o cálculo de proporção baseado na categoria que mais vendeu (topo = 100% da altura)
+                const maiorQtd = Math.max(...data.map(item => item.quantidade)) || 1;
+
+                data.forEach((item, index) => {
+                    const barra = document.getElementById(`bar${index}`);
+                    const legenda = document.getElementById(`lbl${index}`);
+
+                    if (barra && legenda) {
+                        // Calcula a porcentagem de altura reativa proporcional de forma segura
+                        const porcentagemAltura = (item.quantidade / maiorQtd) * 90 + 10; // Mínimo de 10% para não sumir o card
+                        barra.style.height = `${porcentagemAltura}%`;
+                        barra.title = `${item.categoria}: ${item.quantidade} unidades`;
+                        legenda.innerText = item.categoria;
+                    }
+                });
+            })
+            .catch(err => console.error("Falha ao atualizar gráfico:", err));
+    }
+
+    // Dispara o gráfico junto com os KPIs na inicialização
+    carregarGraficoDinamicoDoBanco();
+
 });
