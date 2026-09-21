@@ -1,0 +1,69 @@
+<div class="container">
+    <header>
+        <h1 id="lblTituloPerfil">MEU PERFIL DE ACESSO</h1>
+    </header>
+
+    <!-- PAINEL 1: MEUS DADOS (SÓ PERMITE ALTERAR O NOME) -->
+    <div id="panel-dados" class="profile-panel-view" style="display: none;">
+        <form id="formMeusDados">
+            <div class="form-group-row">
+                <div class="form-group small">
+                    <label for="txtMyID">ID:</label>
+                    <input type="text" id="txtMyID" value="3" disabled>
+                </div>
+                <div class="form-group large">
+                    <label for="txtMyLogin">Login de Acesso:</label>
+                    <input type="text" id="txtMyLogin" value="christian" disabled>
+                </div>
+                <div class="form-group large">
+                    <label for="txtMyPerfil">Perfil/Nível:</label>
+                    <input type="text" id="txtMyPerfil" value="Vendedor" disabled>
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label for="txtMyNome">Nome Completo *:</label>
+                <input type="text" id="txtMyNome" value="Christian" required maxlength="100">
+            </div>
+            <div class="button-panel" style="margin-top: 25px;">
+                <button type="submit" class="btn-primary"><i class="fa-solid fa-user-check"></i> Atualizar Meu Nome</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- PAINEL 2: CONFIGURAÇÕES DE TEMA (LIGHT / DARK) -->
+    <div id="panel-config" class="profile-panel-view" style="display: none;">
+        <div class="theme-selection-box" style="background: #f8fafc; padding: 25px; border-radius: 6px; border: 1px solid #e2e8f0; text-align: center;">
+            <i class="fa-solid fa-circle-half-stroke" style="font-size: 48px; color: var(--primary); margin-bottom: 15px;"></i>
+            <h3>Preferência Visual do Sistema</h3>
+            <p style="color: #64748b; margin-bottom: 25px; font-size: 14px;">Escolha o tema de exibição que melhor se adapta ao seu ambiente de trabalho.</p>
+            
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <button type="button" id="btnThemeLight" class="btn-neutral" style="background-color: #e2e8f0; color: #334155;"><i class="fa-solid fa-sun"></i> Tema Claro</button>
+                <button type="button" id="btnThemeDark" class="btn-primary" style="background-color: #1e293b; color: #ffffff;"><i class="fa-solid fa-moon"></i> Tema Escuro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAINEL 3: ALTERAR SENHA (VALIDAÇÃO DE TRÊS ETAPAS) -->
+    <div id="panel-senha" class="profile-panel-view" style="display: none;">
+        <form id="formTrocarSenha">
+            <div class="form-group">
+                <label for="txtSenhaAtual">Senha Atual *:</label>
+                <input type="password" id="txtSenhaAtual" required placeholder="Digite sua senha atual">
+            </div>
+            <div class="form-group-row" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label for="txtNovaSenha">Nova Senha *:</label>
+                    <input type="password" id="txtNovaSenha" required placeholder="Mínimo 6 caracteres">
+                </div>
+                <div class="form-group">
+                    <label for="txtNovaSenhaRepetida">Confirmar Nova Senha *:</label>
+                    <input type="password" id="txtNovaSenhaRepetida" required placeholder="Repita a nova senha">
+                </div>
+            </div>
+            <div class="button-panel" style="margin-top: 25px;">
+                <button type="submit" class="btn-primary"><i class="fa-solid fa-key"></i> Alterar Minha Senha</button>
+            </div>
+        </form>
+    </div>
+</div>

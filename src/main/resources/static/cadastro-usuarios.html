@@ -1,0 +1,96 @@
+<div class="container">
+    <header>
+        <h1>GERENCIAMENTO DE USUÁRIOS E PERMISSÕES</h1>
+    </header>
+
+    <div class="split-layout">
+        
+        <!-- COLUNA DA ESQUERDA: FORMULÁRIO DE CADASTRO -->
+        <div class="split-column-form" style="flex: 1 1 350px;">
+            <form id="formUsuario">
+                <div class="form-group-row">
+                    <div class="form-group small">
+                        <label for="txtIDUsuario">ID:</label>
+                        <input type="text" id="txtIDUsuario" disabled placeholder="Aut.">
+                    </div>
+                    <div class="form-group large">
+                        <label for="txtNomeUsuario">Nome Completo *:</label>
+                        <input type="text" id="txtNomeUsuario" required maxlength="100">
+                    </div>
+                </div>
+
+                <div class="form-group-row" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label for="txtLoginUsuario">Login de Acesso *:</label>
+                        <input type="text" id="txtLoginUsuario" required maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="cbTipoUsuario">Tipo/Perfil *:</label>
+                        <select id="cbTipoUsuario" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Escritório">Escritório</option>
+                            <option value="Almoxarifado">Almoxarifado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO DE SENHAS COM MÁSCARA -->
+                <div class="form-group-row" style="margin-top: 15px;">
+                    <div class="form-group">
+                        <label for="txtSenhaUsuario">Senha *:</label>
+                        <input type="password" id="txtSenhaUsuario" required placeholder="******">
+                    </div>
+                    <div class="form-group">
+                        <label for="txtSenhaRepetidaUsuario">Confirmar Senha *:</label>
+                        <input type="password" id="txtSenhaRepetidaUsuario" required placeholder="******">
+                    </div>
+                </div>
+
+                <!-- Checkbox de mostrar senhas -->
+                <div class="show-password-row">
+                    <input type="checkbox" id="chkRevelarSenha">
+                    <label for="chkRevelarSenha">Mostrar Senhas</label>
+                </div>
+
+                <!-- SEÇÃO DE SELEÇÃO DE PERMISSÕES (ROLES) -->
+                <div class="permissions-section-box">
+                    <label class="section-title-label"><i class="fa-solid fa-key"></i> Níveis de Acesso (Permissões)</label>
+                    <div class="checkbox-grid-panel">
+                        <div class="chk-item"><input type="checkbox" id="chkCadastros"> <label for="chkCadastros">Acesso Cadastros</label></div>
+                        <div class="chk-item"><input type="checkbox" id="chkRelatorios"> <label for="chkRelatorios">Acesso Relatórios</label></div>
+                        <div class="chk-item"><input type="checkbox" id="chkPedidos"> <label for="chkPedidos">Acesso Painel PDV</label></div>
+                        <div class="chk-item"><input type="checkbox" id="chkAdmin"> <label for="chkAdmin">Acesso Administração</label></div>
+                    </div>
+                </div>
+
+                <div class="button-panel-vertical">
+                    <button type="submit" id="btnSalvarUsuario" class="btn-primary"><i class="fa-solid fa-user-check"></i> Salvar Usuário</button>
+                    <button type="button" id="btnLimparUsuario" class="btn-neutral"><i class="fa-solid fa-eraser"></i> Limpar Campos</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- COLUNA DA DIREITA: TABELA DE USUÁRIOS ATIVOS -->
+        <div class="split-column-table" style="flex: 2 1 400px;">
+            <div class="table-responsive-wrapper">
+                <table class="data-table-grid" id="tblUsuarios">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Nome</th>
+                            <th>Login</th>
+                            <th>Perfil / Nível</th>
+                            <th style="width: 110px; text-align: center;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyUsuarios">
+                        <!-- Alimentado via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

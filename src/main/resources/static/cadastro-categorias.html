@@ -1,0 +1,48 @@
+<div class="container">
+    <header>
+        <h1>GERENCIAMENTO DE CATEGORIAS</h1>
+    </header>
+
+    <!-- Layout dividido em duas colunas (Formulário + Tabela) -->
+    <div class="split-layout">
+        
+        <!-- COLUNA DA ESQUERDA: FORMULÁRIO DE CADASTRO -->
+        <div class="split-column-form">
+            <form id="formCategoria">
+                <div class="form-group">
+                    <label for="txtIDCategoria">ID:</label>
+                    <input type="text" id="txtIDCategoria" disabled placeholder="Automático">
+                </div>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="txtNomeCategoria">Nome da Categoria *:</label>
+                    <input type="text" id="txtNomeCategoria" required maxlength="100" placeholder="Ex: LUBRIFICANTES, FREIOS">
+                </div>
+
+                <div class="button-panel-vertical">
+                    <button type="submit" id="btnSalvarCategoria" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                    <button type="button" id="btnLimparCategoria" class="btn-neutral"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- COLUNA DA DIREITA: TABELA DE CONSULTA -->
+        <div class="split-column-table">
+            <div class="table-responsive-wrapper">
+                <table class="data-table-grid" id="tblCategorias">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">ID</th>
+                            <th>Descrição da Categoria</th>
+                            <th style="width: 140px; text-align: center;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyCategorias">
+                        <!-- Linhas alimentadas dinamicamente via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

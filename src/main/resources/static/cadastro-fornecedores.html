@@ -1,0 +1,98 @@
+<div class="container">
+    <header>
+        <h1>CADASTRO DE FORNECEDORES</h1>
+    </header>
+
+    <form id="formFornecedor">
+        <div class="form-group-row">
+            <div class="form-group small">
+                <label for="txtIDFornecedor">ID:</label>
+                <input type="text" id="txtIDFornecedor" disabled placeholder="Automático">
+            </div>
+            <div class="form-group large">
+                <label for="txtRazaoSocial">Razão Social *:</label>
+                <input type="text" id="txtRazaoSocial" required maxlength="150">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtNomeFantasiaFornecedor">Nome Fantasia:</label>
+                <input type="text" id="txtNomeFantasiaFornecedor" maxlength="100">
+            </div>
+            <div class="form-group">
+                <label for="txtCNPJFornecedor">CNPJ *:</label>
+                <input type="text" id="txtCNPJFornecedor" required placeholder="00.000.000/0001-00">
+            </div>
+            <div class="form-group">
+                <label for="txtInscricaoEstadual">Inscrição Estadual:</label>
+                <input type="text" id="txtInscricaoEstadual" maxlength="50">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtRuaFornecedor">Rua:</label>
+                <input type="text" id="txtRuaFornecedor">
+            </div>
+            <div class="form-group">
+                <label for="txtBairroFornecedor">Bairro:</label>
+                <input type="text" id="txtBairroFornecedor">
+            </div>
+            <div class="form-group">
+                <label for="txtCidadeFornecedor">Cidade:</label>
+                <input type="text" id="txtCidadeFornecedor">
+            </div>
+            <div class="form-group small">
+                <label for="txtEstadoFornecedor">Estado:</label>
+                <input type="text" id="txtEstadoFornecedor" maxlength="2" placeholder="UF">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtCEPFornecedor">CEP:</label>
+                <input type="text" id="txtCEPFornecedor" placeholder="00000-000">
+            </div>
+            <div class="form-group">
+                <label for="txtRamoAtividade">Ramo de Atividade:</label>
+                <input type="text" id="txtRamoAtividade" placeholder="Ex: Peças, Óleos">
+            </div>
+            <div class="form-group">
+                <label for="txtNomeVendedor">Nome do Vendedor:</label>
+                <input type="text" id="txtNomeVendedor">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtTelefoneFornecedor">Telefone Contato:</label>
+                <input type="tel" id="txtTelefoneFornecedor">
+            </div>
+            <div class="form-group">
+                <label for="txtEmailFornecedor">E-mail:</label>
+                <input type="email" id="txtEmailFornecedor">
+            </div>
+            <div class="form-group">
+                <label for="txtDataCadastroFornecedor">Data Cadastro *:</label>
+                <input type="date" id="txtDataCadastroFornecedor" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtDadosBancarios">Dados Bancários:</label>
+            <input type="text" id="txtDadosBancarios" placeholder="Ex: Banco do Brasil - Ag: 1234 - C/C: 5544-3">
+        </div>
+
+        <div class="form-group">
+            <label for="txtObservacoesFornecedor">Observações:</label>
+            <textarea id="txtObservacoesFornecedor" rows="4"></textarea>
+        </div>
+
+        <div class="button-panel">
+            <button type="button" id="btnBuscarFornecedor" class="btn-secondary">Buscar</button>
+            <button type="button" id="btnLimparFornecedor" class="btn-neutral">Limpar</button>
+            <button type="submit" id="btnSalvarFornecedor" class="btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>

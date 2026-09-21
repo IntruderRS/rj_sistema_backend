@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RJ Sistema - Painel de Controle</title>
+    <link rel="stylesheet" href="css/dashboard-style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+
+<body>
+
+    <div class="dashboard-wrapper">
+
+        <!-- BARRA LATERAL -->
+        <aside class="sidebar">
+
+            <!-- Cabeçalho do Sistema -->
+            <div class="sidebar-logo-container">
+                <div class="sidebar-logo" id="btnLogoHome" style="cursor: pointer;">
+                    <!-- Removido o ícone da esquerda. Mantido apenas o texto puro e limpo -->
+                    <span class="nav-text" style="color: #ffffff; font-weight: 700;">RJ Sistema</span>
+                </div>
+
+                <!-- Botão Hambúrguer mantido no lado direito com imagem local -->
+                <button id="btn-toggle-sidebar" class="sidebar-toggle-btn" title="Recolher/Expandir Menu">
+                    <img src="imagens/cardapio-60.png" alt="" class="toggle-icon-img" style="filter: invert(100%);">
+                </button>
+            </div>
+
+            <!-- Painel de Perfil do Usuário -->
+            <div class="user-profile-panel">
+                <div class="user-avatar-row">
+                    <img src="imagens/ChristianRomeira.png" alt="Avatar" class="user-avatar-img"
+                        onerror="this.src='https://placeholder.com'">
+                    <div class="user-meta-info">
+                        <span class="user-name">Christian</span>
+                        <span class="user-status"><span class="status-indicator-dot"></span> Online</span>
+                    </div>
+                </div>
+                <div class="user-action-toolbar">
+                    <button class="toolbar-btn" data-target="perfil-usuario" title="Dados do Usuário">
+                        <img src="imagens/usuario.png" alt="Perfil" class="toolbar-icon-img">
+                    </button>
+                    <button class="toolbar-btn" data-target="config-sistema" title="Configurações">
+                        <img src="imagens/configuracoes.png" alt="Configurações" class="toolbar-icon-img">
+                    </button>
+                    <button class="toolbar-btn" data-target="alterar-senha" title="Alterar Senha">
+                        <img src="imagens/cadeado.png" alt="Senha" class="toolbar-icon-img">
+                    </button>
+                    <button class="toolbar-btn btn-trigger-logout" title="Deslogar / Trocar Usuário">
+                        <img src="imagens/alterar-usuario.png" alt="Sair" class="toolbar-icon-img">
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu de Navegação -->
+            <div class="menu-label">MENU DE NAVEGAÇÃO</div>
+
+            <nav class="sidebar-menu">
+                <!-- Dashboard e Pedidos alinhados -->
+                <a href="#" class="menu-item active" data-target="home">
+                    <img src="imagens/dashboard.png" alt="" class="menu-icon-img"> <span>Dashboard</span>
+                </a>
+                <a href="#" class="menu-item" data-target="pedidos">
+                    <img src="imagens/pedidos.png" alt="" class="menu-icon-img"> <span>Pedidos</span>
+                </a>
+
+                <!-- Menu Cascata: Cadastros -->
+                <div class="menu-dropdown">
+                    <a href="#" class="menu-item dropdown-toggle">
+                        <div class="menu-item-left">
+                            <img src="imagens/seta-direita.png" alt="" class="menu-icon-img"> <span>Cadastros</span>
+                        </div>
+                        <img src="imagens/ic-arrow.png" alt="" class="menu-arrow-img arrow">
+                    </a>
+                    <div class="dropdown-container">
+                        <a href="#" class="submenu-item" data-target="clientes"><img src="imagens/clientes.png" alt=""
+                                class="submenu-icon-img"> Clientes</a>
+                        <a href="#" class="submenu-item" data-target="fornecedores"><img src="imagens/fornecedor.png"
+                                alt="" class="submenu-icon-img"> Fornecedores</a>
+                        <a href="#" class="submenu-item" data-target="produtos"><img src="imagens/icons8-caixa-64.png"
+                                alt="" class="submenu-icon-img"> Produtos</a>
+                        <a href="#" class="submenu-item" data-target="categorias"><img src="imagens/categorias.png"
+                                alt="" class="submenu-icon-img"> <span>Categoria</span></a>
+                    </div>
+                </div>
+
+                <!-- Menu Cascata: Relatórios -->
+                <div class="menu-dropdown">
+                    <a href="#" class="menu-item dropdown-toggle">
+                        <div class="menu-item-left">
+                            <img src="imagens/seta-direita.png" alt="" class="menu-icon-img"> <span>Relatórios</span>
+                        </div>
+                        <img src="imagens/ic-arrow.png" alt="" class="menu-arrow-img arrow">
+                    </a>
+                    <div class="dropdown-container">
+                        <a href="#" class="submenu-item" data-target="lista-clientes"><img src="imagens/clientes.png"
+                                alt="" class="submenu-icon-img"> Lista Clientes</a>
+                        <a href="#" class="submenu-item" data-target="lista-fornecedores"><img
+                                src="imagens/fornecedor.png" alt="" class="submenu-icon-img"> Lista Fornecedores</a>
+                        <a href="#" class="submenu-item" data-target="lista-produtos"><img
+                                src="imagens/icons8-caixa-64.png" alt="" class="submenu-icon-img"> Lista Produtos</a>
+                        <a href="#" class="submenu-item" data-target="lista-pedidos"><img src="imagens/pedidos.png"
+                                alt="" class="submenu-icon-img"> <span>Lista Pedidos</span></a>
+                    </div>
+                </div>
+
+                <!-- Menu Cascata: Administração -->
+                <div class="menu-dropdown">
+                    <a href="#" class="menu-item dropdown-toggle">
+                        <div class="menu-item-left">
+                            <img src="imagens/administracao.png" alt="" class="menu-icon-img">
+                            <span>Administração</span>
+                        </div>
+                        <img src="imagens/ic-arrow.png" alt="" class="menu-arrow-img arrow">
+                    </a>
+                    <div class="dropdown-container">
+                        <a href="#" class="submenu-item" data-target="usuarios">
+                            <img src="imagens/usuario.png" alt="" class="submenu-icon-img"> Usuários
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <i class="fa-solid fa-user-gear"></i>
+                <span>RJ Sistema v2.0</span>
+            </div>
+        </aside>
+
+        <!-- ÁREA DE CONTEÚDO DIREITA -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="toggle-info">
+                    <span id="txtDataAtual">Terça-feira, 05 de Agosto de 2026</span>
+                </div>
+                <div class="top-bar-actions">
+                    <button class="btn-logout btn-trigger-logout"><i class="fa-solid fa-right-from-bracket"></i>
+                        Sair</button>
+                </div>
+            </header>
+
+            <!-- CONTEÚDO DINÂMICO UNIFICADO -->
+            <section id="dynamic-container" class="content-body">
+
+                <!-- TELA DA LOGO DA EMPRESA -->
+                <div id="logo-view" class="view-panel" style="display: none;">
+                    <div class="brand-presentation">
+                        <div class="brand-image-wrapper">
+                            <img src="imagens/logo.png" alt="Logo RJ Sistema" class="brand-logo-img"
+                                onerror="this.style.display='none'; document.getElementById('fallback-logo-icon').style.display='block'">
+                            <i id="fallback-logo-icon" class="fa-solid fa-square-poll-vertical"
+                                style="font-size: 120px; color: var(--primary); display: none;"></i>
+                        </div>
+                        <h2>RJ SISTEMA</h2>
+                        <p class="brand-version">Automotive Products</p>
+                        <p class="brand-copyright">© 2026 RJ Sistema Corporation. Todos os direitos reservados.</p>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD INICIAL (HOME) -->
+                <div id="home-view" class="view-panel">
+                    <div class="welcome-banner">
+                        <h2>Bem-vindo de volta ao RJ Sistema!</h2>
+                        <p>Aqui está o resumo operacional das suas vendas e faturamentos de hoje.</p>
+                    </div>
+
+                    <div class="kpi-grid">
+                        <div class="kpi-card blue">
+                            <div class="kpi-icon"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="kpi-info">
+                                <h3>Faturamento Diário</h3>
+                                <p class="kpi-value">R$ 25.320,50</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card green">
+                            <div class="kpi-icon"><i class="fa-solid fa-cart-check"></i></div>
+                            <div class="kpi-info">
+                                <h3>Pedidos Faturados</h3>
+                                <p class="kpi-value">15 Pedidos</p>
+                            </div>
+                        </div>
+                        <div class="kpi-card orange">
+                            <div class="kpi-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+                            <div class="kpi-info">
+                                <h3>Alerta de Estoque</h3>
+                                <p class="kpi-value">3 Itens Baixos</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-row">
+                        <div class="chart-box">
+                            <h3><i class="fa-solid fa-chart-bar"></i> Vendas por Categoria (Mês Atual)</h3>
+                            <div class="simulated-chart-bar">
+                                <div class="bar" style="height: 80%;" data-label="Lubrificantes"></div>
+                                <div class="bar" style="height: 65%;" data-label="Pneus"></div>
+                                <div class="bar" style="height: 40%;" data-label="Freios"></div>
+                                <div class="bar" style="height: 90%;" data-label="Suspensão"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </div>
+
+    <script src="js/dashboard-router.js"></script>
+</body>
+
+</html>

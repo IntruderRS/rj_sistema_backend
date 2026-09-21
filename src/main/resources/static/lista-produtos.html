@@ -1,0 +1,41 @@
+<div class="container">
+    <header>
+        <h1>LISTA DE PRODUTOS</h1>
+    </header>
+
+    <!-- Barra de Filtro Rápido e Dinâmico -->
+    <div class="form-group-row" style="margin-bottom: 20px; align-items: flex-end;">
+        <div class="form-group large">
+            <label for="txtFiltroProduto"><i class="fa-solid fa-magnifying-glass"></i> Filtrar por Nome, Código de Barras ou Lote:</label>
+            <input type="text" id="txtFiltroProduto" placeholder="Digite para pesquisar em tempo real...">
+        </div>
+    </div>
+
+    <!-- Tabela Responsiva Fluida com Rolagem Horizontal -->
+    <div class="table-responsive-wrapper" style="max-height: 500px; overflow-y: auto;">
+        <table class="data-table-grid" id="tblListaProdutos" style="min-width: 1550px;">
+            <thead>
+                <tr>
+                    <th style="width: 70px; text-align: center;">ID</th>
+                    <th style="width: 300px; text-align: left;">Nome do Produto</th>
+                    <th style="width: 130px; text-align: right;">Val. Custo</th>
+                    <th style="width: 110px; text-align: center;">Lucro (%)</th>
+                    <th style="width: 130px; text-align: right;">Val. Venda</th>
+                    <th style="width: 100px; text-align: center;">Estoque</th>
+                    <th style="width: 90px; text-align: center;">Peso (kg)</th>
+                    <th style="width: 130px;">Dimensões</th>
+                    <th style="width: 150px;">Código de Barras</th>
+                    <th style="width: 110px;">NCM</th>
+                    <th style="width: 110px;">Lote</th>
+                    <th style="width: 110px; text-align: center;">Vencimento</th>
+                    <th style="width: 160px;">Categoria</th>
+                    <th style="width: 180px;">Fornecedor</th>
+                    <th style="width: 110px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyListaProdutos">
+                <!-- Alimentado dinamicamente via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,562 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-bg: #1a2332;
+    --sidebar-dark: #111823;
+    --topbar-bg: #ffffff;
+    --body-bg: #f8fafc;
+    --text-main: #334155;
+    --primary: #0284c7;
+    --success: #16a34a;
+    --warning: #ea580c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--body-bg);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+.dashboard-wrapper { display: flex; min-height: 100vh; }
+
+/* SIDEBAR E LOGO SUPERIOR */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    left: 0; top: 0; z-index: 100;
+}
+
+.sidebar-logo {
+    padding: 22px 25px;
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #243145;
+    background: var(--sidebar-dark);
+    transition: background 0.2s;
+}
+.sidebar-logo:hover { background: #1c2838; }
+
+/* CORREÇÃO DO ALINHAMENTO DA LABEL */
+.menu-label {
+    padding: 20px 25px 8px 25px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #4b5e74;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left; /* Garante alinhamento à esquerda */
+}
+
+.sidebar-menu { display: flex; flex-direction: column; padding: 5px 0; flex: 1; overflow-y: auto; }
+
+/* CORREÇÃO DE ALINHAMENTO DOS BOTÕES (DA ESQUERDA PARA A DIREITA) */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 25px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    text-align: left; /* Alinha da esquerda para direita */
+    transition: all 0.2s;
+}
+/* ============================================================================
+   CORREÇÃO: ESTILIZAÇÃO DE IMAGENS DE ÍCONES DO MENU LATERAL (OFFLINE READY)
+   ============================================================================ */
+.menu-icon-img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    /* Filtro para deixar a imagem com tom cinza-azulado (#94a3b8) padrão do menu */
+    filter: invert(70%) sepia(10%) saturate(300%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+
+/* Força o ícone principal a ficar branco brilhante no hover do link */
+.menu-item:hover .menu-icon-img, 
+.menu-item.active .menu-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+/* Configuração da setinha do dropdown em formato de imagem */
+.menu-arrow-img {
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+    filter: invert(70%) sepia(10%) saturate(300%) hue-rotate(180deg);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+.menu-item:hover .menu-arrow-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+/* Configuração dos mini-ícones de marcadores (dots) dos submenus */
+.submenu-icon-img {
+    width: 8px;
+    height: 8px;
+    object-fit: contain;
+    filter: invert(60%) sepia(10%) saturate(300%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+.submenu-item:hover .submenu-icon-img, 
+.submenu-item.active-sub .submenu-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+/* Ajustes finos adicionais no rodapé e no cabeçalho para remover tags i remanescentes */
+.sidebar-logo img, .sidebar-footer img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+/* CONTROLES DO MENU CASCATA */
+.dropdown-toggle { justify-content: space-between; width: 100%; cursor: pointer; }
+.menu-item-left { display: flex; align-items: center; gap: 12px; }
+.menu-item-left i { width: 20px; text-align: center; }
+.arrow { font-size: 11px; transition: transform 0.2s; }
+
+/* SUBMENU TOTALMENTE ALINHADO */
+.dropdown-container {
+    max-height: 0;
+    overflow: hidden;
+    background-color: var(--sidebar-dark);
+    transition: max-height 0.2s ease-out;
+}
+.menu-dropdown.open .dropdown-container { max-height: 250px; }
+.menu-dropdown.open .arrow { transform: rotate(180deg); }
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 25px 11px 52px; /* Recuo perfeito mantendo alinhamento à esquerda */
+    color: #8a9cb0;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    transition: color 0.2s, background 0.2s;
+}
+/* Garante que as imagens/ícones dos submenus acompanhem o tamanho do texto */
+.submenu-item img.submenu-icon-img {
+    width: 16px; /* CORRIGIDO: Aumentado para manter proporção visual com a fonte 16px */
+    height: 16px;
+    object-fit: contain;
+    filter: invert(70%) sepia(10%) saturate(300%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+.submenu-item i { width: 16px; text-align: center; font-size: 13px; }
+.submenu-item:hover, .submenu-item.active-sub {
+    color: #ffffff;
+    background-color: #243145;
+}
+.submenu-item:hover img.submenu-icon-img, 
+.submenu-item.active-sub img.submenu-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg); /* Ícone brilha branco */
+}
+
+.sidebar-footer { padding: 20px; background: var(--sidebar-dark); display: flex; align-items: center; gap: 10px; font-size: 14px; }
+
+/* CONTEÚDO DIREITA */
+.main-content { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.top-bar { height: 65px; background-color: var(--topbar-bg); border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+.btn-logout { background: none; border: none; color: #ef4444; font-weight: 600; cursor: pointer; }
+.content-body { padding: 30px; }
+
+/* ESTILIZAÇÃO DO CONTEINER DA SUA IMAGEM LOGO.PNG */
+.brand-presentation {
+    background: #ffffff;
+    min-height: 70vh; /* Garante altura suficiente para centralização vertical */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.brand-image-wrapper {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.brand-logo-img {
+    max-height: 280px; /* CORREÇÃO: Aumentado de 120px para 280px para o logotipo ficar grande */
+    max-width: 90%;
+    object-fit: contain;
+    animation: pulse 3s infinite ease-in-out; /* Mantém o efeito pulsar sutil */
+}
+
+.brand-presentation h2 { 
+    font-size: 36px; 
+    font-weight: 800; 
+    color: #111823; 
+    letter-spacing: 2px; 
+    margin-bottom: 10px; 
+}
+
+.brand-version { 
+    font-size: 16px; 
+    color: var(--primary); 
+    font-weight: 600; 
+    margin-bottom: 60px; 
+}
+
+.brand-copyright { 
+    font-size: 13px; 
+    color: #94a3b8; 
+}
+
+/* CARDS GERENCIAIS */
+.welcome-banner { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; padding: 25px; border-radius: 8px; margin-bottom: 30px; }
+.welcome-banner h2 { margin: 0 0 10px 0; } .welcome-banner p { margin: 0; opacity: 0.9; }
+.kpi-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
+.kpi-card { flex: 1; min-width: 240px; background: white; padding: 20px; border-radius: 8px; display: flex; align-items: center; gap: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.kpi-icon { font-size: 32px; }
+.kpi-card.blue .kpi-icon { color: var(--primary); } .kpi-card.green .kpi-icon { color: var(--success); } .kpi-card.orange .kpi-icon { color: var(--warning); }
+.kpi-value { font-size: 24px; font-weight: bold; margin: 5px 0 0 0; } .kpi-info h3 { margin: 0; font-size: 14px; color: #64748b; text-transform: uppercase; }
+.chart-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.chart-box h3 { margin: 0 0 30px 0; font-size: 16px; }
+.simulated-chart-bar { height: 180px; display: flex; align-items: flex-end; gap: 40px; padding: 0 20px; border-bottom: 2px solid #e2e8f0;}
+.bar { flex: 1; background: var(--primary); border-radius: 4px 4px 0 0; position: relative; }
+.bar::after { content: attr(data-label); position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #64748b; white-space: nowrap; }
+
+@keyframes pulse { 
+    0% { transform: scale(1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); } 
+    50% { transform: scale(1.04); filter: drop-shadow(0 6px 12px rgba(2,132,199,0.15)); } 
+    100% { transform: scale(1); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05)); } 
+}
+
+/* ============================================================================
+   NOVO: ESTILIZAÇÃO DO PAINEL DE PERFIL DO USUÁRIO (ALINHADO COM O PRINT)
+   ============================================================================ */
+.user-profile-panel {
+    padding: 15px 20px;
+    background-color: var(--sidebar-dark);
+    border-bottom: 1px solid #243145;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Torna a foto redonda */
+    object-fit: cover;
+    border: 2px solid #334155;
+}
+
+.user-meta-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f8fafc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+.user-status {
+    font-size: 12px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Indicador de Bolinha Verde Online */
+.status-indicator-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+/* BARRA DE ATALHOS RÁPIDOS */
+.user-action-toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #243145; /* Fundo cinza azulado sutil para destacar a barra */
+    border-radius: 4px;
+    padding: 3px;
+    border: 1px solid #334155;
+    margin-top: 5px; /* Garante que não cole na foto */
+}
+
+.toolbar-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #94a3b8; /* Cor original cinza clara */
+    padding: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.toolbar-btn i {
+    color: #cbd5e1 !important; /* Força os ícones a ficarem brancos/claros na tela */
+    font-size: 14px;
+}
+
+.toolbar-btn:hover i {
+    color: #ffffff !important; /* Brilha totalmente branco ao passar o mouse */
+}
+
+.toolbar-btn.btn-trigger-logout:hover i {
+    color: #ef4444 !important; /* O ícone de sair fica vermelho no hover */
+}
+/* Configura o tamanho e a tonalidade das imagens dos ícones locais */
+.toolbar-icon-img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    /* Aplica um filtro visual para deixar a imagem cinza clara nativamente no CSS */
+    filter: invert(70%) sepia(10%) saturate(300%) hue-rotate(180deg);
+    transition: filter 0.2s ease;
+}
+
+/* Deixa o ícone totalmente branco quando o usuário passa o mouse por cima */
+.toolbar-btn:hover .toolbar-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg);
+}
+
+/* Deixa o ícone de sair vermelho quando passa o mouse por cima */
+.toolbar-btn.btn-trigger-logout:hover .toolbar-icon-img {
+    filter: invert(30%) sepia(80%) saturate(5000%) hue-rotate(340deg);
+}
+
+/* ============================================================================
+   REGRAS AUTOMÁTICAS PARA O TEMA ESCURO (DARK MODE NATÍVÕ)
+   ============================================================================ */
+body.dark-theme {
+    background-color: #0f172a !important;
+}
+
+/* Quando o corpo do site tiver a classe dark-theme, tudo isso acende em branco automaticamente */
+body.dark-theme label,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme .total-label,
+body.dark-theme .menu-label {
+    color: #ffffff !important;
+}
+
+/* Força os painéis de fundo e o topo a acompanharem o tom escuro */
+body.dark-theme .main-content,
+body.dark-theme .brand-presentation,
+body.dark-theme .split-column-form,
+body.dark-theme .permissions-section-box {
+    background-color: #1e293b !important;
+}
+
+body.dark-theme .top-bar {
+    background-color: #1e293b !important;
+    border-bottom: 1px solid #334155;
+}
+
+body.dark-theme #dynamic-container .container {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+}
+
+/* ============================================================================
+   ESTILIZAÇÃO DO MENU RETRÁTIL (MINI SIDEBAR RESPONSIVA)
+   ============================================================================ */
+.sidebar-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--sidebar-dark);
+    border-bottom: 1px solid #243145;
+    height: 66px;
+    padding: 0 24px; /* Dá um recuo elegante de 24px nas duas laterais, desencostando o texto e o botão das paredes */
+    box-sizing: border-box;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.sidebar-toggle-btn:hover { background-color: #243145; }
+
+.toggle-icon-img {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: invert(70%) sepia(10%) saturate(300%) hue-rotate(180deg) !important;
+    transform: rotate(0deg); /* Mantém na horizontal quando o menu está aberto */
+    transition: filter 0.2s ease, transform 0.3s ease;
+}
+.sidebar-toggle-btn:hover .toggle-icon-img {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) !important;
+}
+
+/* Adiciona transição suave de largura nos contêineres principais */
+.sidebar {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-content {
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================================
+   CLASSES DO ESTADO RECOLHIDO (.collapsed) - ATIVADO POR BOTÃO OU TELA PEQUENA
+   ============================================================================ */
+@media (min-width: 993px) {
+    body.collapsed .sidebar {
+        width: 70px;
+    }
+    body.collapsed .main-content {
+        margin-left: 70px;
+    }
+    body.collapsed .sidebar .nav-text,
+    body.collapsed .sidebar span,
+    body.collapsed .sidebar .menu-label,
+    body.collapsed .sidebar .user-meta-info,
+    body.collapsed .sidebar .arrow,
+    body.collapsed .sidebar .user-action-toolbar,
+    body.collapsed .sidebar .dropdown-container {
+        display: none !important;
+    }
+    body.collapsed .sidebar-logo-container { justify-content: center; padding: 0; }
+    body.collapsed .sidebar-logo-container .sidebar-toggle-btn { display: flex !important; margin: 0 auto; }
+    body.collapsed .sidebar-logo-container .sidebar-logo { display: none !important; }
+    body.collapsed .menu-item, body.collapsed .submenu-item { justify-content: center; padding: 15px 0; }
+    body.collapsed .toggle-icon-img { transform: rotate(-90deg); }
+}
+/* ============================================================================
+   ESTRUTURAÇÃO COMPLETA E CORRIGIDA PARA TELAS MENORES (MÍDIA RESPONSIVA)
+   ============================================================================ */
+@media (max-width: 992px) {
+    
+    /* ESTADO 1: PADRÃO EM TELA PEQUENA (MENU RECOLHIDO EM 70PX) */
+    body:not(.force-expanded-mobile) .sidebar {
+        width: 70px !important;
+    }
+    body:not(.force-expanded-mobile) .main-content {
+        margin-left: 70px !important;
+    }
+    body:not(.force-expanded-mobile) .sidebar .nav-text, 
+    body:not(.force-expanded-mobile) .sidebar span, 
+    body:not(.force-expanded-mobile) .sidebar .menu-label, 
+    body:not(.force-expanded-mobile) .sidebar .user-meta-info, 
+    body:not(.force-expanded-mobile) .sidebar .arrow, 
+    body:not(.force-expanded-mobile) .sidebar .user-action-toolbar,
+    body:not(.force-expanded-mobile) .sidebar .dropdown-container {
+        display: none !important;
+    }
+    body:not(.force-expanded-mobile) .sidebar-logo-container {
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+    body:not(.force-expanded-mobile) .sidebar-logo {
+        display: none !important;
+    }
+    body:not(.force-expanded-mobile) .sidebar-toggle-btn {
+        display: flex !important;
+        margin: 0 auto !important;
+    }
+    body:not(.force-expanded-mobile) .menu-item,
+    body:not(.force-expanded-mobile) .submenu-item {
+        justify-content: center !important;
+        padding: 15px 0 !important;
+    }
+
+    /* ESTADO 2: SE CLICAR NO BOTÃO SANDUÍCHE (MENU EXPANDIDO EM 260PX) */
+     body.force-expanded-mobile .sidebar .submenu-item {
+        display: flex !important;
+        flex-direction: row !important; /* CORREÇÃO MÁSTER: Força o ícone e o texto a ficarem LADO A LADO */
+        align-items: center !important;
+        justify-content: flex-start !important;
+        padding: 12px 25px 12px 52px !important; /* Mantém o recuo elegante à esquerda */
+        width: 100% !important;
+    }
+
+    body.force-expanded-mobile .sidebar .submenu-item span {
+        display: inline-block !important; /* Força o texto oculto a reaparecer brilhante no mobile */
+        color: #94a3b8 !important;
+        font-size: 16px !important;
+    }
+    
+    body.force-expanded-mobile .sidebar .submenu-item:hover span,
+    body.force-expanded-mobile .sidebar .submenu-item.active-sub span {
+        color: #ffffff !important; /* Brilha em branco no foco */
+    }
+}
+/* ============================================================================
+   CORREÇÃO MÁSTER: FORÇA O ALINHAMENTO EM CASCATA VERTICAL DOS SUBMENUS
+   ============================================================================ */
+.dropdown-container {
+    display: flex !important;
+    flex-direction: column !important; /* FORÇA UM ITEM ABAIXO DO OUTRO (CASCATA) */
+    width: 100% !important;
+    background-color: var(--sidebar-dark) !important;
+}
+
+/* Garante o empilhamento vertical correto quando expandido em telas menores */
+@media (max-width: 992px) {
+    body.force-expanded-mobile .sidebar .dropdown-container {
+        display: flex !important;
+        flex-direction: column !important; /* CORREÇÃO DO PRINT: Empilha verticalmente no mobile */
+        width: 100% !important;
+    }
+    
+    body.force-expanded-mobile .sidebar .submenu-item {
+        display: flex !important;
+        width: 100% !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        padding: 12px 25px 12px 52px !important; /* Mantém o recuo elegante à esquerda */
+    }
+}

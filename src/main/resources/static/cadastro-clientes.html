@@ -1,0 +1,90 @@
+<div class="container">
+    <header>
+        <h1>CADASTRO DE CLIENTES</h1>
+    </header>
+
+    <form id="formCliente" onsubmit="salvarClienteWeb(event)">
+        <div class="form-group-row">
+            <div class="form-group small">
+                <label for="txtID">ID:</label>
+                <input type="text" id="txtID" disabled placeholder="Automático">
+            </div>
+            <div class="form-group large">
+                <label for="txtRazaoSocialNome">Razão Social/Nome *:</label>
+                <input type="text" id="txtRazaoSocialNome" required maxlength="150">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtNomeFantasia">Nome Fantasia:</label>
+                <input type="text" id="txtNomeFantasia" maxlength="100">
+            </div>
+            <div class="form-group">
+                <label for="txtCNPJCPF">CNPJ/CPF *:</label>
+                <input type="text" id="txtCNPJCPF" required placeholder="000.000.000-00">
+            </div>
+            <div class="form-group">
+                <label for="txtNascimento">Data Nascimento:</label>
+                <input type="date" id="txtNascimento">
+            </div>
+            <div class="form-group">
+                <label for="txtProfissaoAtividade">Atividade/Profissão:</label>
+                <input type="text" id="txtProfissaoAtividade" maxlength="100" placeholder="Ex: Mecânico, Autônomo">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtRua">Rua:</label>
+                <input type="text" id="txtRua">
+            </div>
+            <div class="form-group">
+                <label for="txtBairro">Bairro:</label>
+                <input type="text" id="txtBairro">
+            </div>
+            <div class="form-group">
+                <label for="txtCidade">Cidade:</label>
+                <input type="text" id="txtCidade">
+            </div>
+            <div class="form-group small">
+                <label for="txtEstado">Estado:</label>
+                <input type="text" id="txtEstado" maxlength="2" placeholder="UF">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtCEP">CEP:</label>
+                <input type="text" id="txtCEP" placeholder="00000-000">
+            </div>
+            <div class="form-group">
+                <label for="txtTelefoneContato">Telefone:</label>
+                <input type="tel" id="txtTelefoneContato">
+            </div>
+            <div class="form-group">
+                <label for="txtWhatsapp">Whatsapp:</label>
+                <input type="tel" id="txtWhatsapp">
+            </div>
+            <div class="form-group">
+                <label for="txtEmail">E-mail:</label>
+                <input type="email" id="txtEmail">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtObservacao">Observações:</label>
+            <textarea id="txtObservacao" rows="4"></textarea>
+        </div>
+
+        <div class="button-panel">
+            <!-- Adicionado onclick para a busca -->
+            <button type="button" id="btnBuscar" class="btn-secondary" onclick="buscarClienteWeb()">Buscar</button>
+
+            <!-- Adicionado onclick para a limpeza -->
+            <button type="button" id="btnLimpar" class="btn-neutral" onclick="limparCamposClienteWeb()">Limpar</button>
+
+            <button type="submit" id="btnSalvar" class="btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>

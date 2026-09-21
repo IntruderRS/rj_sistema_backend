@@ -1,0 +1,37 @@
+<div class="container">
+    <header>
+        <h1>PEDIDOS FATURADOS</h1>
+    </header>
+
+    <!-- Barra de Filtro Rápido e Dinâmico -->
+    <div class="form-group-row" style="margin-bottom: 20px; align-items: flex-end;">
+        <div class="form-group large">
+            <label for="txtFiltroPedido"><i class="fa-solid fa-magnifying-glass"></i> Filtrar por Nome do Cliente, Forma de Pagamento ou Status:</label>
+            <input type="text" id="txtFiltroPedido" placeholder="Digite para pesquisar em tempo real...">
+        </div>
+    </div>
+
+    <!-- Tabela Responsiva Fluida com Rolagem Horizontal -->
+    <div class="table-responsive-wrapper" style="max-height: 500px; overflow-y: auto;">
+        <table class="data-table-grid" id="tblListaPedidos" style="min-width: 1400px;">
+            <thead>
+                <tr>
+                    <th style="width: 80px; text-align: center;">ID Pedido</th>
+                    <th style="width: 160px; text-align: center;">Data / Hora</th>
+                    <th style="width: 280px; text-align: left;">Cliente Vinculado</th>
+                    <th style="width: 130px;">Forma Pagto</th>
+                    <th style="width: 110px; text-align: right;">Val. Frete</th>
+                    <th style="width: 110px; text-align: center;">Desconto (%)</th>
+                    <th style="width: 110px; text-align: right;">Imposto (R$)</th>
+                    <th style="width: 140px; text-align: right;">Valor Total Líquido</th>
+                    <th style="width: 120px; text-align: center;">Tipo Frete</th>
+                    <th style="width: 120px; text-align: center;">Status</th>
+                    <th style="width: 100px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyListaPedidos">
+                <!-- Alimentado dinamicamente via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>

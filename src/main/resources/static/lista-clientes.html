@@ -1,0 +1,43 @@
+<div class="container">
+    <header>
+        <h1>LISTA DE CLIENTES</h1>
+    </header>
+
+    <!-- Barra de Filtro Rápido -->
+    <div class="form-group-row" style="margin-bottom: 20px; align-items: flex-end;">
+        <div class="form-group large">
+            <label for="txtFiltroCliente"><i class="fa-solid fa-magnifying-glass"></i> Filtrar por Nome, CPF ou
+                Cidade:</label>
+            <input type="text" id="txtFiltroCliente" placeholder="Digite para pesquisar em tempo real...">
+        </div>
+    </div>
+
+    <!-- Tabela Responsiva com Rolagem Horizontal Ativa -->
+    <div class="table-responsive-wrapper" style="max-height: 500px; overflow-y: auto;">
+        <table class="data-table-grid" id="tblListaClientes" style="min-width: 1600px;">
+            <thead>
+                <tr>
+                     <th style="width: 70px;">ID</th>
+                    <th style="width: 280px; text-align: left;">Nome / Razão Social</th>
+                    <th style="width: 200px;">Nome Fantasia</th>
+                    <th style="width: 150px;">CNPJ / CPF</th>
+                    <th style="width: 110px;">Nascimento</th>
+                    <th style="width: 150px;">Atividade/Profissão</th>
+                    <th style="width: 200px;">Rua</th>
+                    <th style="width: 130px;">Bairro</th>
+                    <th style="width: 140px;">Cidade</th>
+                    <th style="width: 60px; text-align: center;">UF</th>
+                    <th style="width: 110px;">CEP</th>
+                    <th style="width: 130px;">Telefone</th>
+                    <th style="width: 130px;">Whatsapp</th>
+                    <th style="width: 220px;">E-mail</th>
+                    <th style="width: 250px;">Observações</th>
+                    <th style="width: 120px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyListaClientes">
+                <!-- Alimentado dinamicamente via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</div>

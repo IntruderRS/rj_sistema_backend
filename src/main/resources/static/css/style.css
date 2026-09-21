@@ -1,0 +1,313 @@
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #28a745;
+    --neutral-color: #6c757d;
+    --background-color: #f4f6f9;
+    --card-background: #ffffff;
+    --text-color: #333333;
+    --border-color: #cccccc;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 100%; /* Ocupa o espaço disponível do painel da direita */
+    background: var(--card-background);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Sombra suave combinando com o Dashboard */
+}
+
+header h1 {
+    font-size: 28px;
+    text-align: center;
+    color: #111111;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+.form-group-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+}
+
+.form-group.small { flex: 0 1 100px; }
+.form-group.large { flex: 2 1 300px; }
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+input, select, textarea {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 15px;
+    width: 100%; 
+    box-sizing: border-box; 
+    background-color: #ffffff; /* Fundo branco limpo */
+    height: 42px; /* Força uma altura fixa idêntica para todos os inputs e selects */
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+input:disabled {
+    background-color: #e9ecef;
+}
+
+.button-panel {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 35px;
+    border-top: 1px solid #eeeeee;
+    padding-top: 20px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { background-color: #004085; }
+
+.btn-secondary { background-color: var(--secondary-color); color: white; }
+.btn-secondary:hover { background-color: #1e7e34; }
+
+.btn-neutral { background-color: var(--neutral-color); color: white; }
+.btn-neutral:hover { background-color: #5a6268; }
+
+/* ============================================================================
+   ESTILIZAÇÃO DO LAYOUT DIVIDIDO (FORMULÁRIO + TABELA NA MESMA TELA)
+   ============================================================================ */
+.split-layout {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.split-column-form {
+    flex: 1 1 300px; /* Ocupa pelo menos 300px, expandindo se necessário */
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.split-column-table {
+    flex: 2 1 450px; /* Dá prioridade de largura para a tabela */
+    min-width: 320px;
+}
+
+.button-panel-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.button-panel-vertical button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ESTILIZAÇÃO PROFISSIONAL DA JTABLE WEB */
+.table-responsive-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: white;
+}
+
+.data-table-grid {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+}
+
+.data-table-grid th {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+.data-table-grid td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.data-table-grid tbody tr:hover {
+    background-color: #f1f5f9; /* Efeito de linha selecionada ao passar o mouse */
+}
+
+/* MINI BOTÕES DE AÇÃO NA TABELA */
+.btn-action-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 3px;
+    color: white;
+}
+.btn-action-sm.edit { background-color: #0284c7; }
+.btn-action-sm.edit:hover { background-color: #0369a1; }
+.btn-action-sm.delete { background-color: #ef4444; }
+.btn-action-sm.delete:hover { background-color: #dc2626; }
+
+/* ============================================================================
+   ESTILIZAÇÃO DO PAINEL DE PERMISSÕES DE ACESSO (USUÁRIOS)
+   ============================================================================ */
+.permissions-section-box {
+    margin-top: 25px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+.section-title-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-grid-panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.chk-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chk-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.chk-item label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    margin: 0;
+    cursor: pointer;
+}
+
+/* CORREÇÃO MÁSTER: Sincroniza a cor de fundo das colunas congeladas no hover da linha */
+.data-table-grid tbody tr:hover td[style*="position: sticky"] {
+    background-color: #f1f5f9 !important;
+}
+
+/* ============================================================================
+   ESTILIZAÇÃO DO DISPLAY DE TOTAL DO PDV (CAIXA GRANDE)
+   ============================================================================ */
+.total-display-box {
+    background-color: #0f172a; /* Fundo preto/escuro de painel digital */
+    color: #22c55e; /* Texto verde neon brilhante */
+    padding: 12px 20px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    border: 1px solid #1e293b;
+    min-width: 240px;
+}
+
+.total-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.total-value {
+    font-size: 28px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 800;
+    line-height: 1;
+}
+
+/* Sincroniza a altura do botão Inserir com a nova altura do select de produtos */
+#btnAdicionarItem {
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* Evita desalinhamento vertical */
+}
+
+/* ============================================================================
+  ALINHAMENTO DA CAIXA DE MOSTRAR SENHA (LINHA ÚNICA SIMÉTRICA)
+   ============================================================================ */
+.show-password-row {
+    display: flex;
+    align-items: center; /* Alinha o quadrado e o texto perfeitamente pelo centro vertical */
+    gap: 8px; /* Cria um espaçamento elegante entre o quadrado e a letra */
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Remove a altura fixa de 42px global apenas para este checkbox específico */
+.show-password-row input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+    padding: 0 !important;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Garante que o texto fique ao lado com tamanho e cor equilibrados */
+.show-password-row label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+    margin: 0;
+    cursor: pointer;
+    white-space: nowrap; /* Impede que o texto quebre para a linha de baixo */
+}

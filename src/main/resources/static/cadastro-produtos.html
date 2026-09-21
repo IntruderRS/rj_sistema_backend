@@ -1,0 +1,104 @@
+<div class="container">
+    <header>
+        <h1>CADASTRO DE PRODUTOS</h1>
+    </header>
+
+    <form id="formProduto">
+        <div class="form-group-row">
+            <div class="form-group small">
+                <label for="txtIDProduto">ID:</label>
+                <input type="text" id="txtIDProduto" disabled placeholder="Automático">
+            </div>
+            <div class="form-group large">
+                <label for="txtNomeProduto">Nome do Produto *:</label>
+                <input type="text" id="txtNomeProduto" required maxlength="150">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtValorCusto">Valor de Custo (R$):</label>
+                <input type="text" id="txtValorCusto" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label for="txtPorcentagemLucro">Porcentagem de Lucro (%):</label>
+                <input type="text" id="txtPorcentagemLucro" placeholder="0.0">
+            </div>
+            <div class="form-group">
+                <label for="txtValorVenda">Valor de Venda (R$):</label>
+                <input type="text" id="txtValorVenda" placeholder="0.00">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtQuantidadeEstoque">Quantidade em Estoque *:</label>
+                <input type="number" id="txtQuantidadeEstoque" required min="0" value="0">
+            </div>
+            <div class="form-group">
+                <label for="txtPeso">Peso (kg):</label>
+                <input type="text" id="txtPeso" placeholder="0.000">
+            </div>
+            <div class="form-group">
+                <label for="txtDimensoes">Dimensões:</label>
+                <input type="text" id="txtDimensoes" placeholder="Ex: 20x15x5 cm">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtCodigoBarras">Código de Barras:</label>
+                <input type="text" id="txtCodigoBarras">
+            </div>
+            <div class="form-group">
+                <label for="txtNCM">NCM:</label>
+                <input type="text" id="txtNCM" maxlength="8">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="txtLote">Lote:</label>
+                <input type="text" id="txtLote">
+            </div>
+            <div class="form-group">
+                <label for="txtVencimento">Data de Vencimento:</label>
+                <input type="date" id="txtVencimento">
+            </div>
+        </div>
+
+        <div class="form-group-row">
+            <div class="form-group">
+                <label for="cbCategoriaProduto">Categoria *:</label>
+                <select id="cbCategoriaProduto" required>
+                    <option value="" disabled selected>Selecione uma Categoria</option>
+                    <!-- As opções serão preenchidas dinamicamente pelo banco -->
+                    <option value="1">Lubrificantes e Fluidos</option>
+                    <option value="2">Pneus e Rodas</option>
+                    <option value="3">Sistema de Freios</option>
+                    <option value="4">Suspensão e Amortecedores</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cbFornecedorProduto">Fornecedor *:</label>
+                <select id="cbFornecedorProduto" required>
+                    <option value="" disabled selected>Selecione um Fornecedor</option>
+                    <option value="1">Lubrax Distribuidora S/A</option>
+                    <option value="2">Pneus Pirelli Ind e Com</option>
+                    <option value="3">Bosch Sistemas de Freio</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtObservacaoProduto">Observações:</label>
+            <textarea id="txtObservacaoProduto" rows="4"></textarea>
+        </div>
+
+        <div class="button-panel">
+            <button type="button" id="btnBuscarProduto" class="btn-secondary">Buscar</button>
+            <button type="button" id="btnLimparProduto" class="btn-neutral">Limpar</button>
+            <button type="submit" id="btnSalvarProduto" class="btn-primary">Salvar</button>
+        </div>
+    </form>
+</div>
