@@ -3,7 +3,7 @@
         <h1>CADASTRO DE FORNECEDORES</h1>
     </header>
 
-    <form id="formFornecedor">
+    <form id="formFornecedor" onsubmit="salvarFornecedorWeb(event)">
         <div class="form-group-row">
             <div class="form-group small">
                 <label for="txtIDFornecedor">ID:</label>
@@ -90,8 +90,8 @@
         </div>
 
         <div class="button-panel">
-            <button type="button" id="btnBuscarFornecedor" class="btn-secondary">Buscar</button>
-            <button type="button" id="btnLimparFornecedor" class="btn-neutral">Limpar</button>
+            <button type="button" id="btnBuscarFornecedor" class="btn-secondary" onclick="buscarFornecedorWeb()">Buscar</button>
+            <button type="button" id="btnLimparFornecedor" class="btn-neutral" onclick="limparCamposFornecedorWeb()">Limpar</button>
             <button type="submit" id="btnSalvarFornecedor" class="btn-primary">Salvar</button>
         </div>
     </form>
