@@ -3,7 +3,7 @@
         <h1>CADASTRO DE PRODUTOS</h1>
     </header>
 
-    <form id="formProduto">
+    <form id="formProduto" onsubmit="salvarProdutoWeb(event)">
         <div class="form-group-row">
             <div class="form-group small">
                 <label for="txtIDProduto">ID:</label>
@@ -97,7 +97,7 @@
 
         <div class="button-panel">
             <button type="button" id="btnBuscarProduto" class="btn-secondary">Buscar</button>
-            <button type="button" id="btnLimparProduto" class="btn-neutral">Limpar</button>
+            <button type="button" id="btnLimparProduto" class="btn-neutral" onclick="limparFormularioProdutoWeb()">Limpar</button>
             <button type="submit" id="btnSalvarProduto" class="btn-primary">Salvar</button>
         </div>
     </form>
