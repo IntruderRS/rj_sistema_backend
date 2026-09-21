@@ -18,48 +18,55 @@
     const chkPedidos = document.getElementById("chkPedidos");
     const chkAdmin = document.getElementById("chkAdmin");
 
-    // Catálogo simulando o banco de dados MySQL
-    let usuariosBanco = [
-        { id: 1, nome: "Christian Christian", login: "christian.adm", tipo: "Administrador", roles: ["ROLE_ADMIN"] },
-        { id: 2, nome: "Ana Costa", login: "ana.vendas", tipo: "Vendedor", roles: ["ROLE_PEDIDOS"] }
-    ];
+    const API_URL = "http://localhost:8080/api/usuarios";
 
-    function atualizarTabelaUsuarios() {
-        tbody.innerHTML = "";
-        usuariosBanco.forEach(user => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td><strong>${user.id}</strong></td>
-                <td>${user.nome}</td>
-                <td><code>${user.login}</code></td>
-                <td><span class="kpi-info" style="font-size:12px; font-weight:600; color:#0284c7;">${user.tipo}</span></td>
-                <td style="text-align: center;">
-                    <button type="button" class="btn-action-sm edit" data-id="${user.id}"><i class="fa-solid fa-user-gear"></i></button>
-                    <button type="button" class="btn-action-sm delete" data-id="${user.id}"><i class="fa-solid fa-trash"></i></button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-        configurarCliquesTabela();
+    // 1. CONSULTA (GET): Lista os operadores reais gravados no MySQL
+    function carregarUsuariosDoBanco() {
+        fetch(API_URL)
+            .then(res => {
+                if (!res.ok) throw new Error("Erro ao obter lista de operadores.");
+                return res.json();
+            })
+            .then(usuarios => {
+                tbody.innerHTML = "";
+                
+                usuarios.forEach(user => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>${user.id}</strong></td>
+                        <td>${user.nome}</td>
+                        <td><code>${user.login}</code></td>
+                        <td><span class="kpi-info" style="font-size:12px; font-weight:600; color:#0284c7;">${user.tipoPerfil}</span></td>
+                        <td style="text-align: center;">
+                            <button type="button" class="btn-action-sm edit" data-id="${user.id}"><i class="fa-solid fa-user-gear"></i></button>
+                            <button type="button" class="btn-action-sm delete" data-id="${user.id}"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                configurarEventosDoGrid(usuarios);
+            })
+            .catch(err => alert("Erro de comunicação: " + err.message));
     }
 
-    function configurarCliquesTabela() {
-        // Ação do Botão Editar/Configurar Usuário
+    // 2. INTERCEPTAÇÃO DE AÇÕES (EDITAR / EXCLUIR VIA SPRING REST)
+    function configurarEventosDoGrid(listaUsuarios) {
+        // Ação de Editar (Hidrata o formulário e marca os privilégios reais)
         tbody.querySelectorAll(".btn-action-sm.edit").forEach(btn => {
             btn.addEventListener("click", () => {
                 const id = parseInt(btn.getAttribute("data-id"));
-                const user = usuariosBanco.find(u => u.id === id);
+                const user = listaUsuarios.find(u => u.id === id);
                 if (user) {
                     txtID.value = user.id;
                     txtNome.value = user.nome;
                     txtLogin.value = user.login;
-                    cbTipo.value = user.tipo;
+                    cbTipo.value = user.tipoPerfil;
                     
-                    // Injeta asteriscos fictícios para segurança visual
+                    // Insere asteriscos de segurança visual
                     txtSenha.value = "******";
                     txtSenhaRepetida.value = "******";
 
-                    // Reseta e re-marca os checkboxes baseado na coleção @ManyToMany vinda do banco
+                    // Sincroniza a coleção ManyToMany reativando as caixas marcadas no banco
                     chkCadastros.checked = user.roles.includes("ROLE_CADASTROS");
                     chkRelatorios.checked = user.roles.includes("ROLE_RELATORIOS");
                     chkPedidos.checked = user.roles.includes("ROLE_PEDIDOS");
@@ -70,83 +77,83 @@
             });
         });
 
-        // Ação do Botão Excluir Usuário
+        // Ação de Excluir
         tbody.querySelectorAll(".btn-action-sm.delete").forEach(btn => {
             btn.addEventListener("click", () => {
-                const id = parseInt(btn.getAttribute("data-id"));
-                if (id === 1) {
-                    alert("Atenção: O usuário administrador principal do sistema não pode ser removido!");
-                    return;
-                }
-                if (confirm(`Deseja revogar o acesso e deletar permanentemente o usuário ID ${id}?`)) {
-                    usuariosBanco = usuariosBanco.filter(u => u.id !== id);
-                    atualizarTabelaUsuarios();
+                const id = btn.getAttribute("data-id");
+                if (confirm(`Deseja revogar o acesso e deletar permanentemente o operador ID ${id}?`)) {
+                    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+                        .then(async res => {
+                            if (!res.ok) {
+                                const msg = await res.text();
+                                throw new Error(msg || "A exclusão foi rejeitada.");
+                            }
+                            alert("Acesso removido com sucesso no banco MySQL!");
+                            carregarUsuariosDoBanco();
+                        })
+                        .catch(err => alert("Erro de Segurança: " + err.message));
                 }
             });
         });
     }
 
-    // Limpa os inputs de senha ao clicar/ganhar foco para evitar apagar manualmente
-    txtSenha.addEventListener("focus", () => txtSenha.value = "");
-    txtSenhaRepetida.addEventListener("focus", () => txtSenhaRepetida.value = "");
+    // Limpeza inteligente ao ganhar foco
+    txtSenha.addEventListener("focus", () => { if(txtSenha.value === "******") txtSenha.value = ""; });
+    txtSenhaRepetida.addEventListener("focus", () => { if(txtSenhaRepetida.value === "******") txtSenhaRepetida.value = ""; });
 
-    // GATILHO DE EXIBIÇÃO: Alterna a máscara de senha (Olhinho)
+    // Alternar máscara (Olhinho)
     chkRevelar.addEventListener("change", () => {
         const type = chkRevelar.checked ? "text" : "password";
         txtSenha.type = type;
         txtSenhaRepetida.type = type;
     });
 
-    // EVENTO DE SUBMIT (SALVAR)
+    // 3. PERSISTÊNCIA (POST): Envia o payload completo com a coleção de Roles
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const s1 = txtSenha.value;
         const s2 = txtSenhaRepetida.value;
 
-        // Regra de Consistência e Igualdade Corporativa (SRP)
         if (s1 !== s2) {
-            alert("Validação de Segurança: As senhas inseridas não coincidem!");
+            alert("Erro de Segurança: As senhas inseridas não coincidem!");
             txtSenhaRepetida.focus();
             return;
         }
 
+        // Coleta as permissões assinaladas na tela para montar a tabela associativa
         const rolesColetadas = [];
         if (chkCadastros.checked) rolesColetadas.push("ROLE_CADASTROS");
         if (chkRelatorios.checked) rolesColetadas.push("ROLE_RELATORIOS");
         if (chkPedidos.checked) rolesColetadas.push("ROLE_PEDIDOS");
         if (chkAdmin.checked) rolesColetadas.push("ROLE_ADMIN");
 
-        if (txtID.value) {
-            // Fluxo UPDATE (merge)
-            const id = parseInt(txtID.value);
-            const index = usuariosBanco.findIndex(u => u.id === id);
-            if (index !== -1) {
-                usuariosBanco[index].nome = txtNome.value.trim();
-                usuariosBanco[index].login = txtLogin.value.trim();
-                usuariosBanco[index].tipo = cbTipo.value;
-                usuariosBanco[index].roles = rolesColetadas;
+        const usuarioObjeto = {
+            id: txtID.value ? parseInt(txtID.value) : null,
+            nome: txtNome.value.trim(),
+            login: txtLogin.value.trim(),
+            tipoPerfil: cbTipo.value,
+            senha: s1,
+            roles: rolesColetadas
+        };
+
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(usuarioObjeto)
+        })
+        .then(async response => {
+            if (!response.ok) {
+                const msg = await response.text();
+                throw new Error(msg || "Erro ao processar cadastro.");
             }
-            alert("Configurações e privilégios do usuário atualizados com sucesso!");
-        } else {
-            // Fluxo INSERT (persist) com simulação de HASH criptográfico
-            const proximoId = usuariosBanco.length > 0 ? Math.max(...usuariosBanco.map(u => u.id)) + 1 : 1;
-            
-            // Simulação matemática do Hash hexadecimal
-            const senhaHashFicticio = Math.abs(s1.split("").reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0)).toString(16);
-
-            usuariosBanco.push({
-                id: proximoId,
-                nome: txtNome.value.trim(),
-                login: txtLogin.value.trim(),
-                tipo: cbTipo.value,
-                roles: rolesColetadas,
-                senhaCripto: senhaHashFicticio
-            });
-            alert(`Usuário registrado com sucesso!\nSenha mascarada gravada no banco: ${senhaHashFicticio}`);
-        }
-
-        limparTelaCompleta();
+            return response.json();
+        })
+        .then(dadosSalvos => {
+            alert(`Sucesso absoluto!\nUsuário "${dadosSalvos.login}" gravado e protegido com Hash SHA-256 no banco MySQL.`);
+            limparTelaCompleta();
+        })
+        .catch(err => alert("Alerta da API: " + err.message));
     });
 
     function limparTelaCompleta() {
@@ -155,12 +162,12 @@
         txtSenha.type = "password";
         txtSenhaRepetida.type = "password";
         chkRevelar.checked = false;
-        atualizarTabelaUsuarios();
+        carregarUsuariosDoBanco(); // Atualiza o grid em tempo real
         txtNome.focus();
     }
 
     btnLimpar.addEventListener("click", limparTelaCompleta);
 
-    // Inicializa o grid na abertura do painel
-    atualizarTabelaUsuarios();
+    // Inicializa a tabela na carga da página
+    carregarUsuariosDoBanco();
 })();
