@@ -2,6 +2,7 @@
     const form = document.getElementById("formPedido");
     if (!form) return;
 
+    const cbCliente = document.getElementById("cbClientePedido");
     const cbProduto = document.getElementById("cbProdutoPedido");
     const txtQtd = document.getElementById("txtQtdPedido");
     const btnAdicionar = document.getElementById("btnAdicionarItem");
@@ -16,11 +17,35 @@
     const btnLimpar = document.getElementById("btnLimparPedido");
     const btnPesquisar = document.getElementById("btnPesquisarPedido");
 
-    let carrinhoItens = []; // Array que armazena os itens (Equivalente à List<ItemPedido>)
-
+    let carrinhoItens = []; // Array temporário do carrinho (List<ItemPedido>)
     const formatador = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-    // 1. ADICIONAR ITEM AO CARRINHO (COMPORTAMENTO MULTIPLICADOR DO PDV)
+    // 1. CARGA DINÂMICA: Abastece o PDV com Clientes e Produtos Reais do Banco
+    function inicializarCamposDoPDV() {
+        // Busca Clientes do MySQL
+        fetch("http://localhost:8080/api/clientes")
+            .then(res => res.json())
+            .then(clientes => {
+                cbCliente.innerHTML = '<option value="" disabled selected>Selecione o Cliente</option>';
+                clientes.forEach(c => {
+                    cbCliente.innerHTML += `<option value="${c.id}">${c.nomeRazao} (${c.cnpjCpf})</option>`;
+                });
+            })
+            .catch(err => console.error("Erro ao alimentar clientes no PDV:", err));
+
+        // Busca Produtos do MySQL
+        fetch("http://localhost:8080/api/produtos")
+            .then(res => res.json())
+            .then(produtos => {
+                cbProduto.innerHTML = '<option value="" disabled selected>Selecione o Produto para adicionar</option>';
+                produtos.forEach(p => {
+                    cbProduto.innerHTML += `<option value="${p.id}" data-preco="${p.valorVenda}">${p.nome} (${formatador.format(p.valorVenda)})</option>`;
+                });
+            })
+            .catch(err => console.error("Erro ao alimentar produtos no PDV:", err));
+    }
+
+    // 2. ADICIONAR ITEM AO CARRINHO (LANÇAMENTO REATIVO)
     btnAdicionar.addEventListener("click", () => {
         if (cbProduto.selectedIndex <= 0) {
             alert("Por favor, selecione um produto válido para lançar.");
@@ -29,21 +54,21 @@
 
         const optionSelecionada = cbProduto.options[cbProduto.selectedIndex];
         const prodId = parseInt(cbProduto.value);
+        // Captura o nome limpando o valor do preço fixo do texto
         const prodNome = optionSelecionada.text.split(" (")[0];
         const precoUnitario = parseFloat(optionSelecionada.getAttribute("data-preco"));
         const quantidade = parseInt(txtQtd.value) || 1;
 
-        // Se o produto já foi lançado, apenas acumula a quantidade (SOLID)
-        const itemExistente = carrinhoItens.find(item => item.produtoId === prodId);
+        // Regra de Acúmulo: se o produto já está na grade, soma a quantidade
+        const itemExistente = carrinhoItens.find(item => item.produto.id === prodId);
         if (itemExistente) {
-            itemExistente.qtd += quantidade;
-            itemExistente.subtotal = itemExistente.qtd * itemExistente.preco;
+            itemExistente.quantidade += quantidade;
+            itemExistente.subtotal = itemExistente.quantidade * itemExistente.preco;
         } else {
             carrinhoItens.push({
                 itemNro: carrinhoItens.length + 1,
-                produtoId: prodId,
-                nome: prodNome,
-                qtd: quantidade,
+                produto: { id: prodId, nome: prodNome }, // Envelope no padrão Object esperado pelo JPA
+                quantidade: quantidade,
                 preco: precoUnitario,
                 subtotal: quantidade * precoUnitario
             });
@@ -54,21 +79,20 @@
         renderizarCarrinhoECalcular();
     });
 
-    // 2. REDESENHA O GRID DO CARRINHO E CALCULA OS TOTAIS (REATIVO)
     function renderizarCarrinhoECalcular() {
         tbody.innerHTML = "";
         let somatorioItens = 0;
 
         carrinhoItens.forEach((item, index) => {
-            item.itemNro = index + 1; // Reorganiza a contagem dos itens
+            item.itemNro = index + 1;
             somatorioItens += item.subtotal;
 
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td style="text-align: center;"><strong>${item.itemNro}</strong></td>
-                <td style="text-align: center;">${item.produtoId}</td>
-                <td>${item.nome}</td>
-                <td style="text-align: center; font-weight: bold;">${item.qtd}</td>
+                <td style="text-align: center;">${item.produto.id}</td>
+                <td>${item.produto.nome}</td>
+                <td style="text-align: center; font-weight: bold;">${item.quantidade}</td>
                 <td style="text-align: right; font-family: monospace;">${formatador.format(item.preco)}</td>
                 <td style="text-align: right; font-family: monospace; font-weight: bold;">${formatador.format(item.subtotal)}</td>
                 <td style="text-align: center;">
@@ -78,7 +102,6 @@
             tbody.appendChild(tr);
         });
 
-        // Configura o botão de remoção rápida de item do carrinho
         tbody.querySelectorAll(".btn-action-sm.delete").forEach(btn => {
             btn.addEventListener("click", () => {
                 const idx = parseInt(btn.getAttribute("data-index"));
@@ -90,9 +113,7 @@
         recalcularTotaisFinais(somatorioItens);
     }
 
-    // 3. CENTRALIZAÇÃO OPERACIONAL DA MATEMÁTICA FINANCEIRA (MÉTODO RECALCULAR_TOTAL DO JUNIT)
     function recalcularTotaisFinais(valorBaseItens = 0) {
-        // Se a função foi chamada sem parâmetro, calcula o somatório do array
         if (valorBaseItens === 0 && carrinhoItens.length > 0) {
             valorBaseItens = carrinhoItens.reduce((sum, item) => sum + item.subtotal, 0);
         }
@@ -101,23 +122,20 @@
         const imposto = parseFloat(txtImposto.value.trim().replace(",", ".")) || 0;
         const descPorcentagem = parseFloat(txtDesconto.value.trim().replace(",", ".")) || 0;
 
-        // Executa as equações matemáticas compostas acumulando taxas
         let totalProvisorio = valorBaseItens + frete + imposto;
         let abatimento = totalProvisorio * (descPorcentagem / 100);
         let valorLiquidoFinal = totalProvisorio - abatimento;
 
         if (valorLiquidoFinal < 0) valorLiquidoFinal = 0;
-
-        // INJETA O VALOR NO VISUAL COM PONTO DE MILHAR (Ex: R$ 1.500,00)
         lblTotal.innerText = formatador.format(valorLiquidoFinal);
     }
 
-    // GATILHOS REATIVOS: Atualiza o total líquido instantaneamente ao digitar taxas ou frete
+    // Escutas de digitação para reatividade total
     txtFrete.addEventListener("input", () => recalcularTotaisFinais(0));
     txtImposto.addEventListener("input", () => recalcularTotaisFinais(0));
     txtDesconto.addEventListener("input", () => recalcularTotaisFinais(0));
 
-    // 4. EVENTO DE REGISTRO DA VENDA (SUBMIT)
+    // 3. FATURAMENTO REAL (POST): Transmite a estrutura Mestre-Detalhe para o Spring Boot
     form.addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -127,21 +145,31 @@
         }
 
         const pedidoVendaObjeto = {
-            clienteId: document.getElementById("cbClientePedido").value,
-            formaPagto: document.getElementById("cbFormaPagto").value,
-            tipoFrete: document.getElementById("cbTipoFretePedido").value,
-            valorFrete: parseFloat(txtFrete.value.replace(",", ".")),
-            descontoPorcentagem: parseFloat(txtDesconto.value.replace(",", ".")),
+            cliente: { id: parseInt(cbCliente.value) },
+            pagto: document.getElementById("cbFormaPagto").value,
+            freteTipo: document.getElementById("cbTipoFretePedido").value,
+            freteVal: parseFloat(txtFrete.value.replace(",", ".")),
+            desc: parseFloat(txtDesconto.value.replace(",", ".")),
             imposto: parseFloat(txtImposto.value.replace(",", ".")),
-            totalLiquido: parseFloat(lblTotal.innerText.replace(/[R$\s]/g, "").replace(".", "").replace(",", ".")),
+            total: parseFloat(lblTotal.innerText.replace(/[R\$\s]/g, "").replace(".", "").replace(",", ".")),
             itens: carrinhoItens,
             status: "FINALIZADO"
         };
 
-        console.log("Pedido fechado pronto para ser persistido via REST API:", pedidoVendaObjeto);
-        alert(`Pedido faturado com sucesso absoluto!\nValor Liquido: ${lblTotal.innerText}\nStatus: FINALIZADO.\nO Grid visual de itens foi limpo!`);
-        
-        limparTelaCompleta();
+        fetch("http://localhost:8080/api/pedidos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pedidoVendaObjeto)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("A API rejeitou o fechamento do faturamento.");
+            return response.json();
+        })
+        .then(pedidoSalvo => {
+            alert(`Venda realizada com sucesso absoluto!\nPedido Nº: ${pedidoSalvo.id}\nTotal Líquido: ${formatador.format(pedidoSalvo.total)}\nGravado com sucesso no MySQL!`);
+            limparTelaCompleta();
+        })
+        .catch(err => alert("Erro ao faturar: " + err.message));
     });
 
     function limparTelaCompleta() {
@@ -151,18 +179,16 @@
         txtFrete.value = "0,00";
         txtDesconto.value = "0,0";
         txtImposto.value = "0,00";
-        lblTotal.innerText = "R$ 0,00";
-        document.getElementById("cbClientePedido").focus();
+        lblTotal.innerText = "R\$ 0,00";
+        cbCliente.focus();
     }
 
     btnLimpar.addEventListener("click", limparTelaCompleta);
 
     btnPesquisar.addEventListener("click", () => {
-        // Redireciona de forma reativa para a lista histórica que criamos no passo anterior
         const itemMenuListaPedidos = document.querySelector('.submenu-item[data-target="lista-pedidos"]');
-        if (itemMenuListaPedidos) {
-            itemMenuListaPedidos.click();
-        }
+        if (itemMenuListaPedidos) itemMenuListaPedidos.click();
     });
 
+    setTimeout(inicializarCamposDoPDV, 100);
 })();
